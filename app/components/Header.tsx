@@ -16,7 +16,7 @@ const menus: MenuNode[] = [
 export default function Header() {
     return (
         <header className="py-8 lg:py-10 px-4 sm:px-8 md:px-8 lg:px-14">
-            <div className="max-w-8xl mx-auto flex items-center justify-between">
+            <div className="max-w-8xl mx-auto flex flex-col sm:flex-row items-center justify-between">
 
                 {/* Logo */}
                 <div className="flex items-center">
@@ -33,7 +33,7 @@ export default function Header() {
                 </div>
 
                 {/* Menu */}
-                <nav className="md:flex items-center gap-8 text-sm lg:text-base font-medium flex gap-4">
+                <nav className="md:flex items-center gap-2 lg:gap-8 mt-4 lg:mt-0 text-sm lg:text-base font-medium flex gap-4">
                     {menus.map((menu) => (
                         <Link
                             key={menu.url}
