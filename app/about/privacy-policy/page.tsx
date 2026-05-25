@@ -13,26 +13,6 @@ export default function PrivacyPolicy() {
 
     return (
         <div className="min-h-screen bg-white" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
-            <style>{`
-                .prose-content h1 { font-size: 1.75rem; font-weight: 700; color: #111827; margin-top: 2.5rem; margin-bottom: 0.75rem; line-height: 1.3; }
-                .prose-content h2 { font-size: 1.375rem; font-weight: 600; color: #111827; margin-top: 2rem; margin-bottom: 0.5rem; line-height: 1.4; }
-                .prose-content h3 { font-size: 1.125rem; font-weight: 600; color: #374151; margin-top: 1.5rem; margin-bottom: 0.4rem; }
-                .prose-content p { color: #4b5563; line-height: 1.8; margin-top: 0.65rem; font-size: 0.975rem; }
-                .prose-content ul { padding-left: 1.5rem; margin-top: 0.65rem; list-style: disc; }
-                .prose-content ul li { color: #4b5563; line-height: 1.8; margin-bottom: 0.2rem; font-size: 0.975rem; }
-                .prose-content ol { padding-left: 1.5rem; margin-top: 0.65rem; list-style: decimal; }
-                .prose-content ol li { color: #4b5563; line-height: 1.8; margin-bottom: 0.2rem; font-size: 0.975rem; }
-                .prose-content a { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
-                .prose-content a:hover { color: #1d4ed8; }
-                .prose-content strong { color: #111827; font-weight: 600; }
-                .prose-content em { font-style: italic; }
-                .prose-content hr { border: none; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
-                .prose-content blockquote { border-left: 3px solid #d1d5db; padding: 0.25rem 0 0.25rem 1rem; margin: 1.25rem 0; color: #6b7280; }
-                .prose-content table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-                .prose-content th { background: #f9fafb; text-align: left; padding: 0.6rem 0.875rem; border: 1px solid #e5e7eb; font-weight: 600; color: #374151; }
-                .prose-content td { padding: 0.6rem 0.875rem; border: 1px solid #e5e7eb; color: #4b5563; }
-            `}</style>
-
             <div className="block pt-0 px-4 sm:px-8 md:px-8 lg:px-14 max-w-8xl mx-auto prose-content">
                 <h1>Privacy Policy</h1>
 
