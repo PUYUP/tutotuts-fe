@@ -36,7 +36,7 @@ export default function PostCard({ post }: { post: any }) {
 
     return (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-            <div className="bg-gray-100 px-4 py-3 h-26 flex flex-col">
+            <div className="bg-gray-100 px-4 py-3 flex flex-col">
                 <div className="flex items-start justify-between gap-2">
                     <div className="block flex-1">
                         <h3 className="font-bold text-gray-900 line-clamp-2 flex-1">{post.title}</h3>

@@ -29,8 +29,7 @@ const DummyPosts: PostNode[] = [
 - Vehicle feels weaker than usual when pulling or accelerating  
 - Feels like there is extra resistance coming from the rear side  
 - Please inspect the entire rear wheel assembly thoroughly  
-- Check and repair any faulty components causing both the rough noise and weak pulling power
-    `,
+   `,
     categoryPath: ['Motorcycle', 'Maintenance'],
     image: {
       before: "/demo-images/Screenshot 2026-05-25 at 10.32.33.png",
@@ -54,6 +53,21 @@ const DummyPosts: PostNode[] = [
       after: "/demo-images/Screenshot 2026-05-25 at 11.26.34.png"
     },
     votes: 32,
+  },
+  {
+    title: "Anti-tilt drill guaranteed straight",
+    sourceUrl: "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F986282963734058%2F&show_text=false&width=267&t=0",
+    content: `
+- Attach the spirit level to the drill bit.
+- Place the drill in a flat position.
+- Glue the spirit level to the back of the drill.
+  `,
+    categoryPath: ["Home", "DIY"],
+    image: {
+      before: "/demo-images/Screenshot 2026-05-25 at 12.10.57.png",
+      after: "/demo-images/Screenshot 2026-05-25 at 12.11.26.png"
+    },
+    votes: 7634,
   },
   {
     title: "Galangal chicken with bajaj chili sauce",
