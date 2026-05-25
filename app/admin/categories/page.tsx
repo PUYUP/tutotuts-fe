@@ -5,7 +5,23 @@ import { useEffect, useState, useCallback } from "react";
 interface CategoryNode {
   id: string;
   name: string;
+  slug: string;
+  parent_id: string | null;
   children?: CategoryNode[];
+}
+
+/**
+ * Generate SEO friendly slug
+ */
+export function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, 'and')
+    .replace(/[^\w\s-]/g, '') // remove special chars
+    .replace(/\s+/g, '-') // spaces -> dash
+    .replace(/--+/g, '-') // multiple dash -> single dash
+    .replace(/^-+|-+$/g, ''); // trim dash
 }
 
 // ---------- helpers ----------
@@ -73,7 +89,7 @@ function CategoryRow({
     await fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newChildName, parentId: node.id }),
+      body: JSON.stringify({ name: newChildName, parent_id: node.id, slug: generateSlug(newChildName) }),
     });
     setLoading(false);
     setAdding(false);
@@ -86,7 +102,7 @@ function CategoryRow({
       className="group flex flex-col border-b border-gray-100 last:border-0"
       style={{ paddingLeft: `${depth * 1.5}rem` }}
     >
-      <div className="flex items-center gap-2 py-2 pr-3">
+      <div className="flex items-center gap-2 py-2 px-3">
         {/* tree connector */}
         {depth > 0 && (
           <span className="text-gray-300 select-none">{"└─"}</span>
@@ -204,7 +220,7 @@ export default function CategoriesPage() {
     await fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newRootName }),
+      body: JSON.stringify({ name: newRootName, slug: generateSlug(newRootName) }),
     });
     setNewRootName("");
     setAddingRoot(false);

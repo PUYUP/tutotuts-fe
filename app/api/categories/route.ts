@@ -1,80 +1,78 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
-import fs from 'fs';
+import { supabase } from '@/lib/supabase';
+
+export interface CategoryRow {
+  id: string;
+  name: string;
+  parent_id: string | null;
+}
 
 export interface CategoryNode {
   id: string;
   name: string;
-  children?: CategoryNode[];
+  children: CategoryNode[];
 }
 
-const DATA_PATH = path.resolve(process.cwd(), 'app/data/categories.json');
-
-function readCategories(): CategoryNode[] {
-  try {
-    return JSON.parse(fs.readFileSync(DATA_PATH, 'utf8')) as CategoryNode[];
-  } catch {
-    return [];
-  }
-}
-
-function writeCategories(cats: CategoryNode[]) {
-  fs.mkdirSync(path.dirname(DATA_PATH), { recursive: true });
-  fs.writeFileSync(DATA_PATH, JSON.stringify(cats, null, 2));
-}
-
-function insertNode(list: CategoryNode[], parentId: string, newNode: CategoryNode): boolean {
-  for (const node of list) {
-    if (node.id === parentId) {
-      node.children = node.children ?? [];
-      node.children.push(newNode);
-      return true;
-    }
-    if (node.children && insertNode(node.children, parentId, newNode)) return true;
-  }
-  return false;
-}
-
-function deleteNode(list: CategoryNode[], id: string): CategoryNode[] {
-  return list
-    .filter((n) => n.id !== id)
-    .map((n) => ({ ...n, children: n.children ? deleteNode(n.children, id) : [] }));
-}
-
-function renameNode(list: CategoryNode[], id: string, name: string): boolean {
-  for (const node of list) {
-    if (node.id === id) { node.name = name; return true; }
-    if (node.children && renameNode(node.children, id, name)) return true;
-  }
-  return false;
+/** Ubah flat rows → nested tree */
+function buildTree(rows: CategoryRow[], parentId: string | null = null): CategoryNode[] {
+  return rows
+    .filter((r) => r.parent_id === parentId)
+    .map((r) => ({
+      id: r.id,
+      name: r.name,
+      children: buildTree(rows, r.id),
+    }));
 }
 
 export async function GET() {
-  return NextResponse.json(readCategories());
+  const { data, error } = await supabase
+    .from('categories')
+    .select('id, name, parent_id')
+    .order('name');
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json(buildTree(data as CategoryRow[]));
 }
 
 export async function POST(req: NextRequest) {
-  const { name, parentId } = await req.json();
-  const newNode: CategoryNode = { id: uuidv4(), name, children: [] };
-  const cats = readCategories();
-  if (parentId) insertNode(cats, parentId, newNode); else cats.push(newNode);
-  writeCategories(cats);
-  return NextResponse.json(newNode, { status: 201 });
+  const { name, parent_id, slug } = await req.json();
+
+  const { data, error } = await supabase
+    .from('categories')
+    .insert({ name, parent_id: parent_id ?? null, slug })
+    .select('id, name, parent_id')
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json(data, { status: 201 });
 }
 
 export async function PATCH(req: NextRequest) {
   const { id, name } = await req.json();
-  const cats = readCategories();
-  renameNode(cats, id, name);
-  writeCategories(cats);
+
+  const { error } = await supabase
+    .from('categories')
+    .update({ name })
+    .eq('id', id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
-  const cats = deleteNode(readCategories(), id);
-  writeCategories(cats);
+
+  // cascade delete anak-anaknya otomatis via FK on delete cascade
+  const { error } = await supabase
+    .from('categories')
+    .delete()
+    .eq('id', id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
   return NextResponse.json({ ok: true });
 }
