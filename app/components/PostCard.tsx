@@ -42,7 +42,7 @@ export default function PostCard({ post }: { post: any }) {
                         <div className="text-xs text-gray-500 mb-1">
                             {post.categoryPath ? post.categoryPath.join(" / ") : "None"}
                         </div>
-                        <h3 className="font-bold text-gray-900 line-clamp-2 flex-1">{post.title}</h3>
+                        <h3 className="font-bold text-gray-900 line-clamp-2 flex-1 text-sm md:text-base">{post.title}</h3>
                     </div>
 
                     {/* It Works Stats + Vote Button */}

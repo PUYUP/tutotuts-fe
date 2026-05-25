@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Drawer, IconButton, Link } from "@mui/material";
+import { Box, Button, Drawer, IconButton, Link, TextField } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import ContentSidebar from "../components/ContentSidebar";
 import Image from "next/image";
@@ -53,7 +53,7 @@ export default function ContentLayout({ children }: { children: ReactNode }) {
                 )}
                 <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}>
                     {windowSize.width < 1024 && (
-                        <Box>
+                        <Box className="mb-4">
                             {/* Logo */}
                             <div className="flex items-center justify-between">
                                 <Link href={"/"} style={{ marginLeft: -8 }}>
@@ -73,6 +73,11 @@ export default function ContentLayout({ children }: { children: ReactNode }) {
                             </div>
                         </Box>
                     )}
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <TextField id="outlined-basic" placeholder="Search here..." variant="outlined" fullWidth size="small" />
+                        <Button variant="contained" sx={{ paddingTop: 1, paddingBottom: 1 }}>Search</Button>
+                    </Box>
 
                     {children}
                 </Box>

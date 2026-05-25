@@ -128,13 +128,14 @@ export default function PostList() {
     return (
         <Box sx={{ width: "100%" }}>
             <Masonry
-                columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 4 }}
-                spacing={2}
-                sequential
+                columns={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
+                spacing={{ xs: 0, sm: 2, md: 2, lg: 2, xl: 3 }}
             >
                 {DummyPosts.map((post, idx) => (
                     <div key={idx}>
-                        <PostCard post={post} />
+                        <Box sx={{ paddingBottom: { xs: 2, sm: 0, md: 0, lg: 0, xl: 0 } }}>
+                            <PostCard post={post} />
+                        </Box>
                     </div>
                 ))}
             </Masonry>
