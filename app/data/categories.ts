@@ -9,11 +9,13 @@ export const categories: CategoryNode[] = [];
 export interface PostNode {
     title?: string;
     sourceUrl: string;
+    sourceId: string;
     content: string;
     categoryPath?: string[];
     votes: number;
     image: {
         before: string;
         after: string;
-    }
+    },
+    maxSeconds?: number;
 }

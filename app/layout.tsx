@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,28 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Header />
         {children}
+
+        <Script
+          id="facebook-jssdk"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.fbAsyncInit = function() {
+                FB.init({
+                  appId      : '${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}',
+                  cookie     : true,
+                  xfbml      : true,
+                  version    : 'v19.0'
+                });
+              };
+            `,
+          }}
+        />
+        <Script
+          src="https://connect.facebook.net/en_US/sdk.js"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );

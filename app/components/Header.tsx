@@ -10,6 +10,7 @@ const menus: MenuNode[] = [
     { name: "Home", url: "/" },
     { name: "Privacy Policy", url: "/about/privacy-policy" },
     { name: "Term of Use", url: "/about/term-of-use" },
+    { name: "Delete Account", url: "/about/delete-account" },
 ];
 
 export default function Header() {

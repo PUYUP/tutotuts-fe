@@ -4,20 +4,20 @@ import MarkdownIt from "markdown-it";
 import Image from "next/image";
 import { useState } from "react";
 import { CategoryNode } from "../data/categories";
+import FacebookVideoPlayer from "./FBVideoPlayer";
+import YouTubePlayer from "./YTVideoPlayer";
 
 const md = new MarkdownIt();
 
-function getCategoryPath(nodes: CategoryNode[], targetId: string): string[] | null {
-    for (const node of nodes) {
-        if (node.id === targetId) {
-            return [node.name];
-        }
-        if (node.children?.length) {
-            const childPath = getCategoryPath(node.children, targetId);
-            if (childPath) return [node.name, ...childPath];
-        }
+function VideoPlayer({ sourceId, sourceUrl }: { sourceId: string, sourceUrl: string }) {
+    switch (sourceId) {
+        case "facebook":
+            return <FacebookVideoPlayer videoUrl={sourceUrl} />;
+        case "youtube":
+            return <YouTubePlayer videoUrl={sourceUrl} autoPlay={false} />;
+        default:
+            return <img src={sourceUrl} className="w-full h-full object-cover" />;
     }
-    return null;
 }
 
 export default function PostCard({ post }: { post: any }) {
@@ -39,7 +39,10 @@ export default function PostCard({ post }: { post: any }) {
             <div className="bg-gray-100 px-4 py-3 flex flex-col">
                 <div className="flex items-start justify-between gap-2">
                     <div className="block flex-1">
-                        <h3 className="font-bold text-gray-900 line-clamp-3 flex-1">{post.title}</h3>
+                        <div className="text-xs text-gray-500 mb-1">
+                            {post.categoryPath ? post.categoryPath.join(" / ") : "None"}
+                        </div>
+                        <h3 className="font-bold text-gray-900 line-clamp-2 flex-1">{post.title}</h3>
                         <div className="mt-1 text-xs text-neutral-600">
                             23 hours ago
                         </div>
@@ -63,21 +66,15 @@ export default function PostCard({ post }: { post: any }) {
                         </span>
                     </div>
                 </div>
-
-
             </div>
 
             <div className="block">
                 <div className="grid grid-cols-2">
                     {post.sourceUrl && (
                         <div className="relative" style={{ paddingBottom: '177.78%' }}>
-                            <iframe
-                                src={post.sourceUrl}
-                                style={{ border: 'none', overflow: 'hidden' }}
-                                allowFullScreen={true}
-                                className="absolute inset-0 w-full h-full"
-                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                            />
+                            <div className="absolute inset-0 w-full h-full overflow-hidden">
+                                <VideoPlayer sourceId={post.sourceId} sourceUrl={post.sourceUrl} />
+                            </div>
                         </div>
                     )}
 
@@ -103,10 +100,6 @@ export default function PostCard({ post }: { post: any }) {
             </div>
 
             <div className="p-4">
-                <div className="text-sm text-gray-700 mb-3">
-                    <strong>Category:</strong>{" "}
-                    {post.categoryPath ? post.categoryPath.join(" / ") : "None"}
-                </div>
                 <div
                     className="prose prose-sm max-w-none text-sm"
                     dangerouslySetInnerHTML={{ __html: md.render(String(post.content ?? "")) }}

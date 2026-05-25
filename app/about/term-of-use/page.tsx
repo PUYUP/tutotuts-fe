@@ -12,87 +12,167 @@ export default function PrivacyPolicy() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#faf8f5] font-serif">
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300&display=swap');
+        <div className="min-h-screen bg-white" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+            <div className="block pt-0 px-4 sm:px-8 md:px-8 lg:px-14 max-w-8xl mx-auto prose-content">
+                <h1>Terms of Service</h1>
 
-                body { font-family: 'Source Serif 4', serif; }
-                .display-font { font-family: 'Playfair Display', serif; }
-
-                .prose-content h1 { font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; color: #1c1917; margin-top: 2rem; margin-bottom: 0.75rem; }
-                .prose-content h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: #1c1917; margin-top: 2rem; margin-bottom: 0.5rem; }
-                .prose-content h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: #292524; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-                .prose-content p { color: #57534e; line-height: 1.8; margin-top: 0.75rem; }
-                .prose-content ul { list-style: none; padding-left: 1rem; margin-top: 0.75rem; }
-                .prose-content ul li { color: #57534e; line-height: 1.8; padding-left: 1rem; position: relative; margin-bottom: 0.25rem; }
-                .prose-content ul li::before { content: '—'; position: absolute; left: -0.5rem; color: #d97706; }
-                .prose-content ol { list-style: decimal; padding-left: 1.5rem; margin-top: 0.75rem; }
-                .prose-content ol li { color: #57534e; line-height: 1.8; margin-bottom: 0.25rem; }
-                .prose-content a { color: #d97706; text-decoration: underline; text-underline-offset: 2px; }
-                .prose-content strong { color: #1c1917; font-weight: 600; }
-                .prose-content em { font-style: italic; }
-                .prose-content hr { border: none; border-top: 1px solid #e7e5e4; margin: 2rem 0; }
-                .prose-content blockquote { border-left: 3px solid #d97706; padding-left: 1rem; margin: 1.5rem 0; color: #78716c; font-style: italic; }
-
-                .section-enter { animation: fadeUp 0.5s ease forwards; }
-                @keyframes fadeUp {
-                    from { opacity: 0; transform: translateY(16px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
-
-            {/* Top bar */}
-            <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#faf8f5]/95 backdrop-blur border-b border-stone-200 shadow-sm" : ""}`}>
-                <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="display-font text-lg font-bold text-stone-800 tracking-tight">
-                        YourApp
-                    </div>
-                    <div className="text-xs text-stone-400 font-sans tracking-widest uppercase">
-                        Last updated: January 2025
-                    </div>
-                </div>
-            </div>
-
-            {/* Hero */}
-            <div className="pt-28 pb-12 px-6 max-w-4xl mx-auto">
-                <div className="text-xs font-sans tracking-[0.2em] text-amber-600 uppercase mb-4">
-                    Legal · Privacy
-                </div>
-                <h1 className="display-font text-5xl md:text-6xl font-bold text-stone-900 leading-tight mb-6">
-                    Privacy<br />
-                    <span className="italic font-normal text-stone-500">Policy</span>
-                </h1>
-                <p className="text-stone-500 text-lg leading-relaxed max-w-lg">
-                    We believe privacy is a right, not a feature. This document explains, without jargon, exactly how we handle your data.
+                <p>
+                    Last Updated: May 25, 2026
                 </p>
-                <div className="mt-10 flex items-center gap-4">
-                    <div className="h-px bg-stone-300 flex-1 max-w-xs" />
-                    <div className="text-amber-500 text-xl">◈</div>
-                    <div className="h-px bg-stone-300 w-8" />
-                </div>
+
+                <p>
+                    Welcome to <strong>Tutotuts</strong>.
+                    By accessing or using our platform, you agree to comply with and be bound by these Terms of Service.
+                </p>
+
+                <h2>1. About Tutotuts</h2>
+
+                <p>
+                    Tutotuts is a platform that curates and organizes tutorial videos from third-party platforms such as YouTube, TikTok, Instagram, Vimeo, and others.
+                </p>
+
+                <p>
+                    Tutotuts may provide AI-generated summaries, notes, categorizations, timestamps, and step-by-step educational content to improve learning accessibility and discovery.
+                </p>
+
+                <h2>2. Acceptance of Terms</h2>
+
+                <p>
+                    By using Tutotuts, you agree to these Terms of Service and our Privacy Policy.
+                    If you do not agree, you should discontinue use of the platform.
+                </p>
+
+                <h2>3. User Accounts</h2>
+
+                <p>
+                    Some features may require account registration.
+                    Users are responsible for:
+                </p>
+
+                <ul>
+                    <li>Maintaining account security</li>
+                    <li>Providing accurate information</li>
+                    <li>All activities performed under their account</li>
+                </ul>
+
+                <p>
+                    We reserve the right to suspend or terminate accounts that violate these terms.
+                </p>
+
+                <h2>4. Embedded Third-Party Content</h2>
+
+                <p>
+                    Tutotuts does not claim ownership of embedded third-party videos or media.
+                </p>
+
+                <p>
+                    All copyrights and ownership remain with the original creators and platforms.
+                </p>
+
+                <p>
+                    Embedded content is displayed using publicly available embedding features or APIs provided by the respective platforms.
+                </p>
+
+                <h2>5. AI-Generated Content Disclaimer</h2>
+
+                <p>
+                    Some tutorials, summaries, explanations, timestamps, and step-by-step instructions may be generated or assisted by artificial intelligence.
+                </p>
+
+                <p>
+                    While we aim for accuracy, AI-generated content may contain mistakes, outdated information, or incomplete guidance.
+                </p>
+
+                <p>
+                    Users should independently verify important technical, financial, legal, medical, or safety-related information before relying on it.
+                </p>
+
+                <h2>6. Acceptable Use</h2>
+
+                <p>
+                    Users agree not to:
+                </p>
+
+                <ul>
+                    <li>Use the platform for illegal purposes</li>
+                    <li>Attempt to disrupt or damage the platform</li>
+                    <li>Scrape or abuse the service excessively</li>
+                    <li>Upload malicious software or harmful code</li>
+                    <li>Violate intellectual property rights</li>
+                    <li>Harass, abuse, or impersonate others</li>
+                </ul>
+
+                <h2>7. Intellectual Property</h2>
+
+                <p>
+                    Tutotuts branding, interface design, AI-generated enhancements, categorizations, and platform-specific features are protected by intellectual property laws.
+                </p>
+
+                <p>
+                    Users may not copy, reproduce, or redistribute platform content without permission unless otherwise permitted by law.
+                </p>
+
+                <h2>8. External Links and Services</h2>
+
+                <p>
+                    Tutotuts may contain links or embedded content from third-party services.
+                    We are not responsible for:
+                </p>
+
+                <ul>
+                    <li>Third-party content accuracy</li>
+                    <li>Availability of external services</li>
+                    <li>Third-party privacy practices</li>
+                    <li>Policies or actions of external platforms</li>
+                </ul>
+
+                <h2>9. Service Availability</h2>
+
+                <p>
+                    We may modify, suspend, or discontinue parts of the platform at any time without prior notice.
+                </p>
+
+                <p>
+                    We do not guarantee uninterrupted or error-free availability.
+                </p>
+
+                <h2>10. Limitation of Liability</h2>
+
+                <p>
+                    To the maximum extent permitted by law, Tutotuts shall not be liable for:
+                </p>
+
+                <ul>
+                    <li>Indirect or consequential damages</li>
+                    <li>Loss of data or profits</li>
+                    <li>Errors in tutorials or AI-generated content</li>
+                    <li>Issues caused by third-party platforms</li>
+                    <li>User reliance on educational content</li>
+                </ul>
+
+                <h2>11. Termination</h2>
+
+                <p>
+                    We reserve the right to suspend or terminate access to the platform for users who violate these Terms of Service or misuse the platform.
+                </p>
+
+                <h2>12. Changes to Terms</h2>
+
+                <p>
+                    We may update these Terms of Service from time to time.
+                    Continued use of the platform after updates constitutes acceptance of the revised terms.
+                </p>
+
+                <h2>13. Contact</h2>
+
+                <p>
+                    For questions regarding these Terms of Service, please contact:
+                </p>
+
+                <p>
+                    <strong>Email:</strong> support@tutotuts.com
+                </p>
             </div>
-
-            {/* Content area */}
-            <main className="max-w-4xl mx-auto px-6 pb-32 section-enter">
-                <div className="prose-content">
-                    {/* ===== PASTE YOUR HTML CONTENT HERE ===== */}
-                </div>
-
-                {/* Footer */}
-                <div className="mt-16 pt-8 border-t border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="text-sm text-stone-400">
-                        © 2025 YourApp, Inc. · All rights reserved.
-                    </div>
-                    <div className="flex gap-4 text-sm">
-                        <a href="#" className="text-stone-400 hover:text-stone-700 transition-colors underline underline-offset-2">
-                            Terms of Service
-                        </a>
-                        <a href="#" className="text-stone-400 hover:text-stone-700 transition-colors underline underline-offset-2">
-                            Cookie Policy
-                        </a>
-                    </div>
-                </div>
-            </main>
         </div>
     );
 }
