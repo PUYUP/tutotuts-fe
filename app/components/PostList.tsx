@@ -128,7 +128,7 @@ export default function PostList() {
     return (
         <Box sx={{ width: "100%" }}>
             <Masonry
-                columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+                columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 4 }}
                 spacing={2}
                 sequential
             >

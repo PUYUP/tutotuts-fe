@@ -43,9 +43,6 @@ export default function PostCard({ post }: { post: any }) {
                             {post.categoryPath ? post.categoryPath.join(" / ") : "None"}
                         </div>
                         <h3 className="font-bold text-gray-900 line-clamp-2 flex-1">{post.title}</h3>
-                        <div className="mt-1 text-xs text-neutral-600">
-                            23 hours ago
-                        </div>
                     </div>
 
                     {/* It Works Stats + Vote Button */}
@@ -101,7 +98,7 @@ export default function PostCard({ post }: { post: any }) {
 
             <div className="p-4">
                 <div
-                    className="prose prose-sm max-w-none text-sm"
+                    className="prose prose-sm max-w-none text-sm post-content"
                     dangerouslySetInnerHTML={{ __html: md.render(String(post.content ?? "")) }}
                 />
             </div>

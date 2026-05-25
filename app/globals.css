@@ -29,27 +29,25 @@ h4 {
   margin-bottom: 6px;
 }
 
-
-
-ul>li {
+.post-content ul>li {
   list-style: disc !important;
   margin-left: 16px;
 }
 
-ul>li+li {
+.post-content ul>li+li {
   margin-top: 2px;
 }
 
-ol>li {
+.post-content ol>li {
   list-style: decimal !important;
   margin-left: 16px;
 }
 
-ol>li+li {
+.post-content ol>li+li {
   margin-top: 2px;
 }
 
-.prose-content h1 {
+.post-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: #111827;
