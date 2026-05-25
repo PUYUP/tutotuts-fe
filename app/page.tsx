@@ -1,65 +1,106 @@
 import Image from "next/image";
+import PostCard from "./components/PostCard";
+import { PostNode } from "./data/categories";
+
+const DummyPosts: PostNode[] = [
+  {
+    title: "Junction between two different pipes size with bolt and nuts",
+    sourceUrl: "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1517623153036583%2F&show_text=false&width=267&t=0",
+    content: `
+- Measure and confirm both pipe sizes.
+- Select the correct reducer flange or adapter fitting.
+- Align the two pipe flanges properly.
+- Insert gasket, bolts, and nuts into the flange connection.
+- Tighten bolts evenly in a crisscross pattern and check for leaks.
+    `,
+    categoryPath: ['Home', 'Wastafel'],
+    image: {
+      before: "/demo-images/before.png",
+      after: "/demo-images/after.png"
+    },
+    votes: 3453,
+  },
+  {
+    title: "The rear wheel is producing a rough grinding noise while driving, especially at low speeds and during acceleration",
+    sourceUrl: "https://youtube.com/embed/-FZRIvgqdvY?si=UYoxsBVbPNqxyCpd",
+    content: `
+- Rear wheel produces a rough grinding noise while driving
+- Noise is more noticeable at low speeds and during acceleration  
+- Vehicle feels weaker than usual when pulling or accelerating  
+- Feels like there is extra resistance coming from the rear side  
+- Please inspect the entire rear wheel assembly thoroughly  
+- Check and repair any faulty components causing both the rough noise and weak pulling power
+    `,
+    categoryPath: ['Motorcycle', 'Maintenance'],
+    image: {
+      before: "/demo-images/Screenshot 2026-05-25 at 10.32.33.png",
+      after: "/demo-images/Screenshot 2026-05-25 at 10.40.21.png"
+    },
+    votes: 145,
+  },
+  {
+    title: "Traditional herbal remedies for fertility and accelerating pregnancy",
+    sourceUrl: "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F962107376598484%2F&show_text=false&width=267&t=0",
+    content: `
+1. Clean and bruise 2 knuckles of ginger
+2. Add 1 turmeric and 2 stalks of lemongrass to a pot with water
+3. Boil for 5-10 minutes then pour the warm mixture
+4. Add 1 tablespoon of lime juice
+5. Repeat for 3 consecutive days every morning on an empty stomach
+  `,
+    categoryPath: ["Health", 'Herbal Remedies'],
+    image: {
+      before: "/demo-images/Screenshot 2026-05-25 at 11.26.14.png",
+      after: "/demo-images/Screenshot 2026-05-25 at 11.26.34.png"
+    },
+    votes: 32,
+  },
+  {
+    title: "Galangal chicken with bajaj chili sauce",
+    sourceUrl: "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1471326694180760%2F&show_text=false&width=267&t=0",
+    content: `
+#### Blender
+- 15 cm galangal
+- 6 shallots
+- 1 stalk lemongrass
+
+#### In a Bowl, Add
+- 500 g chicken
+- 1 sachet Desaku marinade
+- 1 sachet Desaku garlic powder
+- 1 tsp Lalapan pepper powder
+- 1/2 tbsp granulated sugar
+- The previously blended spices (galangal, lemongrass, and shallots)
+
+#### Instructions
+1. Mix all ingredients evenly.
+2. Steam for 10 minutes.
+3. Fry until fully cooked.
+  `,
+    categoryPath: ["Cooking", "Recipes", "Chicken"],
+    image: {
+      before: "/demo-images/Screenshot 2026-05-25 at 11.45.35.png",
+      after: "/demo-images/Screenshot 2026-05-25 at 11.45.44.png"
+    },
+    votes: 432,
+  },
+]
+
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="block py-8 lg:py-14 px-4 sm:px-8 md:px-8 lg:px-14 max-w-8xl mx-auto">
+      <div className="block mb-10">
+        <h1 className="text-5xl font-bold text-gray-900">tutotuts</h1>
+        <p className="text-lg text-gray-600 mt-2">
+          A collection of curated tutorials and step-by-step guides to help you learn new things and solve problems. Support creator by watching the video.
+        </p>
+      </div>
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {DummyPosts.map((post, idx) => (
+          <PostCard key={idx} post={post} />
+        ))}
+      </div>
     </div>
   );
 }

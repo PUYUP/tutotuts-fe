@@ -24,3 +24,27 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+h4 {
+  margin-bottom: 6px;
+}
+
+
+
+ul>li {
+  list-style: disc !important;
+  margin-left: 16px;
+}
+
+ul>li+li {
+  margin-top: 2px;
+}
+
+ol>li {
+  list-style: decimal !important;
+  margin-left: 16px;
+}
+
+ol>li+li {
+  margin-top: 2px;
+}
