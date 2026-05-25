@@ -1,4 +1,3 @@
-import Image from "next/image";
 import PostCard from "./components/PostCard";
 import { PostNode } from "./data/categories";
 
@@ -103,9 +102,8 @@ const DummyPosts: PostNode[] = [
 
 export default function Home() {
   return (
-    <div className="block py-8 lg:py-14 px-4 sm:px-8 md:px-8 lg:px-14 max-w-8xl mx-auto">
+    <div className="block pt-0 px-4 sm:px-8 md:px-8 lg:px-14 max-w-8xl mx-auto">
       <div className="block mb-10">
-        <h1 className="text-5xl font-bold text-gray-900">tutotuts</h1>
         <p className="text-lg text-gray-600 mt-2">
           A collection of curated tutorials and step-by-step guides to help you learn new things and solve problems. Support creator by watching the video.
         </p>
