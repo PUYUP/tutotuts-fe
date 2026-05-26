@@ -186,29 +186,31 @@ export default function PostForm() {
           />
         </div>
 
-        <CategorySelect onChange={(path, id) => {
-          setCategoryPath(path);
-          setCategoryId(id);
-        }} />
+        <div className="grid grid-cols-2 gap-3">
+          <CategorySelect onChange={(path, id) => {
+            setCategoryPath(path);
+            setCategoryId(id);
+          }} />
 
-        <div>
-          <label className="block font-medium mb-1">Source ID</label>
-          <select
-            className="w-full rounded border p-2 disabled:opacity-50"
-            value={sourceId}
-            onChange={(e) => setSourceId(e.target.value)}
-            required
-            disabled={loading}
-          >
-            <option value="" disabled>
-              Select a source
-            </option>
-            {SOURCE_OPTIONS.map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.label}
+          <div>
+            <label className="block font-medium mb-1">Source ID</label>
+            <select
+              className="w-full rounded border p-2 disabled:opacity-50"
+              value={sourceId}
+              onChange={(e) => setSourceId(e.target.value)}
+              required
+              disabled={loading}
+            >
+              <option value="" disabled>
+                Select a source
               </option>
-            ))}
-          </select>
+              {SOURCE_OPTIONS.map((opt) => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>
@@ -222,29 +224,31 @@ export default function PostForm() {
           />
         </div>
 
-        <ImageUpload
+        {/* <ImageUpload
           label="Thumbnail"
           field={thumbnail}
           onChange={onThumbnailChange}
           onRemove={onThumbnailRemove}
           disabled={loading}
-        />
+        /> */}
 
-        <ImageUpload
-          label="Before Image"
-          field={imageBefore}
-          onChange={onBeforeChange}
-          onRemove={onBeforeRemove}
-          disabled={loading}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <ImageUpload
+            label="Image Before"
+            field={imageBefore}
+            onChange={onBeforeChange}
+            onRemove={onBeforeRemove}
+            disabled={loading}
+          />
 
-        <ImageUpload
-          label="After Image"
-          field={imageAfter}
-          onChange={onAfterChange}
-          onRemove={onAfterRemove}
-          disabled={loading}
-        />
+          <ImageUpload
+            label="Image After"
+            field={imageAfter}
+            onChange={onAfterChange}
+            onRemove={onAfterRemove}
+            disabled={loading}
+          />
+        </div>
 
         <div>
           <label className="block font-medium">Content (Markdown)</label>
