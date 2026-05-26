@@ -27,6 +27,12 @@ body {
 
 h4 {
   margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.post-content ul,
+.post-content ol {
+  margin-bottom: 10px;
 }
 
 .post-content ul>li {
