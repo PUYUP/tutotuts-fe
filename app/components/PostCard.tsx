@@ -19,6 +19,7 @@ function PlayButton() {
 export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: any) => void }) {
     const [votes, setVotes] = useState<number>(post.votes ?? 0);
     const [voted, setVoted] = useState<boolean>(false);
+    const [viewContent, setViewContent] = useState<boolean>(false);
 
     function handleVote() {
         if (voted) {
@@ -35,7 +36,7 @@ export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: a
     }
 
     return (
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden h-full">
             <div className="bg-gray-100 px-4 py-3 flex flex-col">
                 <div className="flex items-start justify-between gap-2">
                     <Link href={`/tutorials/${post.slug}`} className="flex-1">
@@ -103,11 +104,16 @@ export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: a
                 </div>
             </div>
 
-            <div className="p-4">
+            <div className="p-4 cursor-pointer" onClick={() => setViewContent(prev => !prev)}>
                 <div
-                    className="prose prose-sm max-w-none text-sm post-content"
+                    className={"prose prose-sm max-w-none text-sm post-content " + (viewContent ? '' : 'line-clamp-3')}
                     dangerouslySetInnerHTML={{ __html: md.render(String(post.content ?? "")) }}
                 />
+                <div className="flex justify-center pt-2">
+                    <button className="text-xs text-blue-500 hover:text-blue-700">
+                        {viewContent ? 'Show less' : 'Show more'}
+                    </button>
+                </div>
             </div>
         </div>
     );
