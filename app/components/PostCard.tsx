@@ -3,24 +3,19 @@
 import MarkdownIt from "markdown-it";
 import Image from "next/image";
 import { useState } from "react";
-import { CategoryNode } from "../data/categories";
-import FacebookVideoPlayer from "./FBVideoPlayer";
-import YouTubePlayer from "./YTVideoPlayer";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 const md = new MarkdownIt();
 
-function VideoPlayer({ sourceId, sourceUrl }: { sourceId: string, sourceUrl: string }) {
-    switch (sourceId) {
-        case "facebook":
-            return <FacebookVideoPlayer videoUrl={sourceUrl} />;
-        case "youtube":
-            return <YouTubePlayer videoUrl={sourceUrl} autoPlay={false} />;
-        default:
-            return <img src={sourceUrl} className="w-full h-full object-cover" />;
-    }
+function PlayButton() {
+    return (
+        <button className="w-16 h-16 rounded-full bg-[#ef4444] backdrop-blur-sm flex items-center justify-center shadow-md hover:scale-105 transition cursor-pointer">
+            <PlayArrowIcon sx={{ fontSize: 48, color: "#ffffff" }} />
+        </button>
+    );
 }
 
-export default function PostCard({ post }: { post: any }) {
+export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: any) => void }) {
     const [votes, setVotes] = useState<number>(post.votes ?? 0);
     const [voted, setVoted] = useState<boolean>(false);
 
@@ -32,6 +27,10 @@ export default function PostCard({ post }: { post: any }) {
             setVotes((v) => v + 1);
             setVoted(true);
         }
+    }
+
+    function playVideo(post: any) {
+        onPlay(post);
     }
 
     return (
@@ -65,12 +64,17 @@ export default function PostCard({ post }: { post: any }) {
                 </div>
             </div>
 
-            <div className="block">
+            <div className="block relative">
                 <div className="grid grid-cols-2">
                     {post.sourceUrl && (
                         <div className="relative" style={{ paddingBottom: '177.78%' }}>
                             <div className="absolute inset-0 w-full h-full overflow-hidden">
-                                <VideoPlayer sourceId={post.sourceId} sourceUrl={post.sourceUrl} />
+                                <Image
+                                    src={post.images.thumbnail}
+                                    alt="thumbnail"
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
                         </div>
                     )}
@@ -78,7 +82,7 @@ export default function PostCard({ post }: { post: any }) {
                     <div className="flex flex-col">
                         <div className="relative" style={{ paddingBottom: '88.89%' }}>
                             <Image
-                                src={post.image.before}
+                                src={post.images.before}
                                 alt="before"
                                 fill
                                 className="object-cover"
@@ -86,12 +90,18 @@ export default function PostCard({ post }: { post: any }) {
                         </div>
                         <div className="relative" style={{ paddingBottom: '88.89%' }}>
                             <Image
-                                src={post.image.after}
+                                src={post.images.after}
                                 alt="after"
                                 fill
                                 className="object-cover"
                             />
                         </div>
+                    </div>
+                </div>
+
+                <div onClick={() => playVideo(post)} className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                    <div>
+                        <PlayButton />
                     </div>
                 </div>
             </div>

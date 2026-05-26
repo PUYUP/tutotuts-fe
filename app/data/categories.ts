@@ -13,7 +13,8 @@ export interface PostNode {
     content: string;
     categoryPath?: string[];
     votes: number;
-    image: {
+    images: {
+        thumbnail: string;
         before: string;
         after: string;
     },
