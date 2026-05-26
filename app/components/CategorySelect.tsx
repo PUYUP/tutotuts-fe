@@ -8,7 +8,7 @@ interface CategoryNode {
 }
 
 interface Props {
-  onChange: (path: string[]) => void;
+  onChange: (path: string[], categoryId: string) => void;
 }
 
 export default function CategorySelect({ onChange }: Props) {
@@ -25,7 +25,7 @@ export default function CategorySelect({ onChange }: Props) {
   // flatten tree for a simple <select>
   const flatten = (nodes: CategoryNode[], prefix: string[] = []): { id: string; label: string; path: string[] }[] => {
     return nodes.flatMap((node) => {
-      const currentPath = [...prefix, node.id];
+      const currentPath = [...prefix, '--'];
       const entry = { id: node.id, label: prefix.concat(node.name).join(" / "), path: currentPath };
       return node.children ? [entry, ...flatten(node.children, currentPath)] : [entry];
     });
@@ -38,7 +38,7 @@ export default function CategorySelect({ onChange }: Props) {
     const opt = options.find((o) => o.id === id);
     if (opt) {
       setSelectedPath(opt.path);
-      onChange(opt.path);
+      onChange(opt.path, id);
     }
   };
 

@@ -66,35 +66,29 @@ export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: a
 
             <div className="block relative">
                 <div className="grid grid-cols-2">
-                    {post.sourceUrl && (
-                        <div className="relative" style={{ paddingBottom: '177.78%' }}>
-                            <div className="absolute inset-0 w-full h-full overflow-hidden">
+                    <div className="relative" style={{ paddingBottom: '177.78%' }}>
+                        <div className="absolute inset-0 w-full h-full overflow-hidden">
+                            {post.image_before_url && (
                                 <Image
-                                    src={post.images.thumbnail}
-                                    alt="thumbnail"
+                                    src={post.image_before_url}
+                                    alt={post.title}
                                     fill
                                     className="object-cover"
                                 />
-                            </div>
+                            )}
                         </div>
-                    )}
+                    </div>
 
-                    <div className="flex flex-col">
-                        <div className="relative" style={{ paddingBottom: '88.89%' }}>
-                            <Image
-                                src={post.images.before}
-                                alt="before"
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="relative" style={{ paddingBottom: '88.89%' }}>
-                            <Image
-                                src={post.images.after}
-                                alt="after"
-                                fill
-                                className="object-cover"
-                            />
+                    <div className="relative" style={{ paddingBottom: '177.78%' }}>
+                        <div className="absolute inset-0 w-full h-full overflow-hidden">
+                            {post.image_after_url && (
+                                <Image
+                                    src={post.image_after_url}
+                                    alt={post.title}
+                                    fill
+                                    className="object-cover"
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

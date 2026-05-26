@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import PostList from './components/PostList';
 import ContentLayout from './layouts/ContentLayout';
+import PostListServer from './components/PostListServer';
 
 export const metadata: Metadata = {
   title: 'tutotuts - Search Engine for Video Tutorials',
@@ -27,7 +27,7 @@ export default function Home() {
           </p>
         </div>
 
-        <PostList />
+        <PostListServer />
       </div>
     </ContentLayout>
   );
