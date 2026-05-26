@@ -41,7 +41,11 @@ export default function PostList({ initialPosts }: { initialPosts: Post[] }) {
     const [play, setPlay] = useState(false);
     const [post, setPost] = useState<Post | null>(null);
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => {
+        setMounted(true);
+        // Beritahu ScrollRestoration bahwa konten sudah siap
+        window.dispatchEvent(new Event('content-ready'));
+    }, []);
 
     useEffect(() => {
         if (post) setPlay(true);

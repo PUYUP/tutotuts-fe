@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
   if (!slug) {
     const { data, error } = await supabase
       .from('tutorials')
-      .select('*, tutorial_categories(category_id)')
+      .select('*, tutorial_categories(category_id, categories(id, name))')
       .order('created_at', { ascending: false })
       .range(Number(from), Number(to));
 
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase
     .from('tutorials')
-    .select('*, tutorial_categories(category_id)')
+    .select('*, tutorial_categories(category_id, categories(id, name))')
     .eq('slug', slug)
     .single();
 

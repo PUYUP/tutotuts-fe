@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
+import { ScrollRestoration } from './components/ScrollRestoration';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,29 +30,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <ScrollRestoration />
         {children}
 
-        <Script
-          id="facebook-jssdk"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.fbAsyncInit = function() {
-                FB.init({
-                  appId      : '${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}',
-                  cookie     : true,
-                  xfbml      : true,
-                  version    : 'v19.0'
-                });
-              };
-            `,
-          }}
-        />
-        <Script
-          src="https://connect.facebook.net/en_US/sdk.js"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
+        {process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId="G-5FV6QSS2GJ" />
+        )}
       </body>
     </html>
   );

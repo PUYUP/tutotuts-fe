@@ -4,6 +4,7 @@ import MarkdownIt from "markdown-it";
 import Image from "next/image";
 import { useState } from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import Link from "next/link";
 
 const md = new MarkdownIt();
 
@@ -37,12 +38,14 @@ export default function PostCard({ post, onPlay }: { post: any, onPlay: (post: a
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
             <div className="bg-gray-100 px-4 py-3 flex flex-col">
                 <div className="flex items-start justify-between gap-2">
-                    <div className="block flex-1">
-                        <div className="text-xs text-gray-500 mb-1">
-                            {post.categoryPath ? post.categoryPath.join(" / ") : "None"}
+                    <Link href={`/tutorials/${post.slug}`} className="flex-1">
+                        <div className="block flex-1">
+                            <div className="text-xs text-gray-500 mb-1">
+                                {post.tutorial_categories && post.tutorial_categories.length > 0 ? post.tutorial_categories.map((c: any) => c.categories.name).join(" / ") : "None"}
+                            </div>
+                            <h3 className="font-bold text-gray-900 line-clamp-2 flex-1 text-sm md:text-base">{post.title}</h3>
                         </div>
-                        <h3 className="font-bold text-gray-900 line-clamp-2 flex-1 text-sm md:text-base">{post.title}</h3>
-                    </div>
+                    </Link>
 
                     {/* It Works Stats + Vote Button */}
                     <div className="flex flex-col items-center shrink-0">
