@@ -82,14 +82,26 @@ export async function GET(req: NextRequest) {
   const slug = url.searchParams.get('slug');
   const from = url.searchParams.get('from') ?? 0;
   const to = url.searchParams.get('to') ?? 25;
+  const categoryId = url.searchParams.get('categoryId');
+
+  console.log('categoryId', categoryId);
 
   if (!slug) {
-    const { data, error } = await supabase
+    let qs = supabase
       .from('tutorials')
-      .select('*, tutorial_categories(category_id, categories(id, name))')
+      .select(
+        categoryId
+          ? '*, tutorial_categories!inner(category_id, categories(id, name))'
+          : '*, tutorial_categories(category_id, categories(id, name))'
+      )
       .order('created_at', { ascending: false })
       .range(Number(from), Number(to));
 
+    if (categoryId) {
+      qs = qs.eq('tutorial_categories.category_id', categoryId);
+    }
+
+    const { data, error } = await qs;
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json(data);
   }
