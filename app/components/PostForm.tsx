@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import styled from "@emotion/styled";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Snackbar } from "@mui/material";
 
 const SOURCE_OPTIONS = [
   { id: "facebook", label: "Facebook" },
@@ -103,6 +104,7 @@ export default function PostForm() {
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [thumbnail, onThumbnailChange, onThumbnailRemove] = useImageField();
   const [imageBefore, onBeforeChange, onBeforeRemove] = useImageField();
@@ -141,8 +143,21 @@ export default function PostForm() {
       const json = await res.json();
       console.log("Response:", res.status, json);
 
-      if (res.ok) alert("Post created!");
-      else alert(`Error: ${json.error ?? res.statusText}`);
+      if (res.ok) {
+        setOpen(true);
+        setTitle("");
+        setSlug("");
+        setSourceId("");
+        setSourceUrl("");
+        setCategoryPath([]);
+        setCategoryId(null);
+        setContent("");
+        onThumbnailRemove();
+        onBeforeRemove();
+        onAfterRemove();
+      } else {
+        alert(`Error: ${json.error ?? res.statusText}`);
+      }
     } catch (err) {
       console.error("Fetch error:", err);
       alert("Unexpected error, check console.");
@@ -150,6 +165,13 @@ export default function PostForm() {
       setLoading(false);
     }
   };
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  }
 
   return (
     <>
@@ -278,6 +300,18 @@ export default function PostForm() {
           {loading ? "Publishing…" : "Publish"}
         </Button>
       </form>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Post saved!"
+        action={
+          <Button variant="text" size="small" onClick={handleClose} sx={{ color: "#fff" }}>
+            Close
+          </Button>
+        }
+      />
     </>
   );
 }

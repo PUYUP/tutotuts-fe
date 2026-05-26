@@ -36,7 +36,7 @@ export default function PostList({ initialPosts }: { initialPosts: Post[] }) {
                         * tanpa perlu JavaScript
                         */}
                         <Link
-                            href={`/posts/${p.slug}`}
+                            href={`/tutorials/${p.slug}`}
                             prefetch={true}
                             style={{ display: "block", textDecoration: "none" }}
                         >
