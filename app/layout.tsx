@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ScrollRestoration } from './components/ScrollRestoration';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { headers } from 'next/headers';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +20,21 @@ export const metadata: Metadata = {
   description: "Search across YouTube, Facebook, and Instagram to find the best video tutorials for any skill.",
 };
 
-export default function RootLayout({
+const EXCLUDED_PATHS = [
+  '/admin/create',
+  '/admin/archives',
+  '/admin/categories',
+];
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get('x-invoke-path') || headersList.get('x-pathname') || '';
+  const isExcluded = EXCLUDED_PATHS.some(path => pathname.startsWith(path));
+
   return (
     <html
       lang="en"
@@ -33,11 +44,10 @@ export default function RootLayout({
         <ScrollRestoration />
         {children}
 
-        {process.env.NODE_ENV === "production" && (
+        {process.env.NODE_ENV === "production" && !isExcluded && (
           <GoogleAnalytics gaId="G-5FV6QSS2GJ" />
         )}
       </body>
     </html>
   );
 }
-
