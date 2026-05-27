@@ -54,7 +54,7 @@ export default function DetailCardWithModal({ post }: { post: Post }) {
                     {categories.map((cat) => (
                         <a
                             key={cat.id}
-                            href={`/archives/${cat.id}`}
+                            href={`/archives/category/${cat.id}`}
                             className="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
                         >
                             {cat.name}

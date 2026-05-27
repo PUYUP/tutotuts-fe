@@ -80,11 +80,12 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const slug = url.searchParams.get('slug');
+  const id = url.searchParams.get('id');
   const from = url.searchParams.get('from') ?? 0;
   const to = url.searchParams.get('to') ?? 25;
   const categoryId = url.searchParams.get('categoryId');
 
-  if (!slug) {
+  if (!slug && !id) {
     let qs = supabase
       .from('tutorials')
       .select(
@@ -107,7 +108,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from('tutorials')
     .select('*, tutorial_categories(category_id, categories(id, name))')
-    .eq('slug', slug)
+    .or(`slug.eq.${slug},id.eq.${id}`)
     .single();
 
   if (error) return NextResponse.json({ error: 'Not found' }, { status: 404 });

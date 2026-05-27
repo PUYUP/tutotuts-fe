@@ -13,6 +13,21 @@ const SOURCE_OPTIONS = [
   { id: "youtube", label: "YouTube" },
 ];
 
+interface Props {
+  initialData?: {
+    id: string;
+    title: string;
+    slug: string;
+    source_id: string;
+    source_url: string;
+    content: string;
+    category_id?: string;
+    thumbnail_url?: string;
+    image_before_url?: string;
+    image_after_url?: string;
+  } | null;
+}
+
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -95,11 +110,13 @@ function ImageUpload({
   );
 }
 
-export default function PostForm() {
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [sourceId, setSourceId] = useState("");
-  const [sourceUrl, setSourceUrl] = useState("");
+export default function PostForm({ initialData }: Props) {
+  const isEditing = !!initialData;
+
+  const [title, setTitle] = useState(initialData?.title ?? "");
+  const [slug, setSlug] = useState(initialData?.slug ?? "");
+  const [sourceId, setSourceId] = useState(initialData?.source_id ?? "");
+  const [sourceUrl, setSourceUrl] = useState(initialData?.source_url ?? "");
   const [categoryPath, setCategoryPath] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [content, setContent] = useState("");
@@ -122,6 +139,9 @@ export default function PostForm() {
     e.preventDefault();
     setLoading(true);
 
+    const url = isEditing ? `/api/posts?id=${initialData.id}` : "/api/posts";
+    const method = isEditing ? "PUT" : "POST";
+
     try {
       const form = new FormData();
       form.append("title", title);
@@ -135,11 +155,7 @@ export default function PostForm() {
       if (imageBefore.file) form.append("imageBefore", imageBefore.file);
       if (imageAfter.file) form.append("imageAfter", imageAfter.file);
 
-      const res = await fetch("/api/posts", {
-        method: "POST",
-        body: form,
-      });
-
+      const res = await fetch(url, { method, body: form });
       const json = await res.json();
       console.log("Response:", res.status, json);
 

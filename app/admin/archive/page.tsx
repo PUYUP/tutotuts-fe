@@ -2,7 +2,7 @@ import ArchiveList from "@/app/components/ArchiveList";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 
-export default function ArchivePage() {
+export default async function ArchivePage() {
     return (
         <main className="min-h-screen bg-gray-50 p-8">
             <div className="flex justify-between">

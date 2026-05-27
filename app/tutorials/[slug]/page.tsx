@@ -52,9 +52,7 @@ export default async function TutorialDetailPage({ params }: Props) {
     return (
         <ContentLayout>
             <div className="max-w-3xl mx-auto">
-
                 <DetailCardWithModal post={tutorial} />
-
             </div>
         </ContentLayout>
     );
