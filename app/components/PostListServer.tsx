@@ -11,7 +11,7 @@ export default async function PostListServer({ categoryId }: Props) {
     const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`);
     if (categoryId) url.searchParams.set('categoryId', categoryId);
 
-    const res = await fetch(url.toString(), { cache: 'default' });
+    const res = await fetch(url.toString(), { cache: 'no-store' });
     const posts = res.ok ? await res.json() : [];
 
     if (!posts.length) {

@@ -165,3 +165,7 @@ h4 {
   border: 1px solid #e5e7eb;
   color: #4b5563;
 }
+
+form.gsc-search-box {
+  margin: 0 !important;
+}

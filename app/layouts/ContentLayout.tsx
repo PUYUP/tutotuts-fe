@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useState } from "react";
 import ContentSidebar from "../components/ContentSidebar";
 import Image from "next/image";
 import MenuIcon from '@mui/icons-material/Menu';
+import Script from "next/script";
 
 const drawerWidth = 240;
 
@@ -75,15 +76,16 @@ export default function ContentLayout({ children }: { children: ReactNode }) {
                             </Box>
                         )}
 
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <TextField id="outlined-basic" placeholder="Search here..." variant="outlined" fullWidth size="small" />
-                            <Button variant="contained" sx={{ paddingTop: 1, paddingBottom: 1 }}>Search</Button>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: '-24px' }}>
+                            <div className="gcse-search"></div>
                         </Box>
 
                         {children}
                     </Box>
                 </Box>
             </Box>
+
+            <Script async src="https://cse.google.com/cse.js?cx=a01387873d052466b" />
         </div>
     );
 }
