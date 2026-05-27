@@ -76,7 +76,7 @@ export default function ContentLayout({ children }: { children: ReactNode }) {
                             </Box>
                         )}
 
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: '-24px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <div className="gcse-search"></div>
                         </Box>
 

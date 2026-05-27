@@ -84,8 +84,6 @@ export async function GET(req: NextRequest) {
   const to = url.searchParams.get('to') ?? 25;
   const categoryId = url.searchParams.get('categoryId');
 
-  console.log('categoryId', categoryId);
-
   if (!slug) {
     let qs = supabase
       .from('tutorials')
