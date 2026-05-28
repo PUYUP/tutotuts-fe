@@ -105,11 +105,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data);
   }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('tutorials')
-    .select('*, tutorial_categories(category_id, categories(id, name))')
-    .or(`slug.eq.${slug},id.eq.${id}`)
-    .single();
+    .select('*, tutorial_categories(category_id, categories(id, name))');
+
+  // Query berdasarkan slug ATAU id
+  if (slug) {
+    query = query.eq('slug', slug);
+  } else if (id) {
+    query = query.eq('id', id);
+  }
+
+  const { data, error } = await query.single();
 
   if (error) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(data);
