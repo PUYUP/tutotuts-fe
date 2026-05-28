@@ -161,6 +161,19 @@ export async function PATCH(req: NextRequest) {
   return NextResponse.json(tutorial);
 }
 
+/** Kumpulkan semua ID dari category + seluruh descendant-nya (rekursif) */
+function getDescendantIds(
+  rows: { id: string; parent_id: string | null }[],
+  rootId: string
+): string[] {
+  const result: string[] = [rootId];
+  const children = rows.filter((r) => r.parent_id === rootId);
+  for (const child of children) {
+    result.push(...getDescendantIds(rows, child.id));
+  }
+  return result;
+}
+
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const slug = url.searchParams.get('slug');
@@ -170,18 +183,30 @@ export async function GET(req: NextRequest) {
   const categoryId = url.searchParams.get('categoryId');
 
   if (!slug && !id) {
+    // Jika ada categoryId, ambil semua descendant IDs terlebih dahulu
+    let categoryIds: string[] | null = null;
+    if (categoryId) {
+      const { data: catRows } = await supabase
+        .from('categories')
+        .select('id, parent_id');
+      if (catRows) {
+        categoryIds = getDescendantIds(catRows, categoryId);
+      }
+    }
+
     let qs = supabase
       .from('tutorials')
       .select(
-        categoryId
+        categoryIds
           ? '*, tutorial_categories!inner(category_id, categories(id, name))'
           : '*, tutorial_categories(category_id, categories(id, name))'
       )
       .order('created_at', { ascending: false })
       .range(Number(from), Number(to));
 
-    if (categoryId) {
-      qs = qs.eq('tutorial_categories.category_id', categoryId);
+    if (categoryIds) {
+      // Filter dengan .in() agar mencakup parent + semua child categories
+      qs = qs.in('tutorial_categories.category_id', categoryIds);
     }
 
     const { data, error } = await qs;

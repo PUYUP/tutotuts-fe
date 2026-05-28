@@ -1,9 +1,7 @@
 import ContentLayout from "@/app/layouts/ContentLayout";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import MarkdownIt from "markdown-it";
 import DetailCardWithModal from "@/app/components/DetailWithModal";
-const md = new MarkdownIt();
+import ContentSidebar from "@/app/components/ContentSidebar";
 
 interface Category {
     id: string;
@@ -50,7 +48,7 @@ export default async function TutorialDetailPage({ params }: Props) {
     if (!tutorial) notFound();
 
     return (
-        <ContentLayout>
+        <ContentLayout sidebar={<ContentSidebar />}>
             <div className="max-w-3xl mx-auto">
                 <DetailCardWithModal post={tutorial} />
             </div>

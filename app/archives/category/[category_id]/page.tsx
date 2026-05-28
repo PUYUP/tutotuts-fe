@@ -1,8 +1,6 @@
+import ContentSidebar from "@/app/components/ContentSidebar";
 import PostListServer from "@/app/components/PostListServer";
 import ContentLayout from "@/app/layouts/ContentLayout";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 
 interface Props {
     params: Promise<{ category_id: string }>;
@@ -12,7 +10,7 @@ export default async function ArchiveCategory({ params }: Props) {
     const { category_id } = await params;
 
     return (
-        <ContentLayout>
+        <ContentLayout sidebar={<ContentSidebar activeId={category_id} />}>
             <div className="block">
                 <div className="block mb-10">
                     <p className="text-lg text-gray-600 mt-2">

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import ContentLayout from './layouts/ContentLayout';
 import PostListServer from './components/PostListServer';
+import ContentSidebar from './components/ContentSidebar';
 
 export const metadata: Metadata = {
   title: 'tutotuts - Search Engine for Video Tutorials',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <ContentLayout>
+    <ContentLayout sidebar={<ContentSidebar />}>
       <div className="block">
         <div className="block mb-10">
           <p className="text-lg text-gray-600 mt-2">
