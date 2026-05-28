@@ -5,11 +5,13 @@ import InboxIcon from '@mui/icons-material/Inbox';
 
 interface Props {
     categoryId?: string;
+    searchQuery?: string;
 }
 
-export default async function PostListServer({ categoryId }: Props) {
+export default async function PostListServer({ categoryId, searchQuery }: Props) {
     const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`);
     if (categoryId) url.searchParams.set('categoryId', categoryId);
+    if (searchQuery) url.searchParams.set('q', searchQuery);
 
     const res = await fetch(url.toString(), { cache: 'no-store' });
     const posts = res.ok ? await res.json() : [];
@@ -20,7 +22,7 @@ export default async function PostListServer({ categoryId }: Props) {
                 <InboxIcon sx={{ fontSize: 48, color: 'text.disabled' }} />
                 <Typography variant="h6" color="text.secondary">No tutorials found</Typography>
                 <Typography variant="body2" color="text.disabled">
-                    There are no tutorials available{categoryId ? ' in this category' : ''}.
+                    There are no tutorials available{categoryId ? ' in this category' : ''}{searchQuery ? ` matching "${searchQuery}"` : ''}.
                 </Typography>
             </Box>
         );

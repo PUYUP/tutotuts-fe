@@ -1,10 +1,10 @@
 'use client';
 
-import { Box, Drawer, IconButton, Link } from "@mui/material";
+import { Box, Button, Drawer, IconButton, Link, TextField } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import MenuIcon from '@mui/icons-material/Menu';
-import Script from "next/script";
+import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -18,8 +18,17 @@ export default function ContentLayout({
     const [mounted, setMounted] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+    const [searchQuery, setSearchQuery] = useState("");
+    const router = useRouter();
 
     const toggleDrawer = () => setDrawerOpen(prev => !prev);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        }
+    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -73,14 +82,28 @@ export default function ContentLayout({
                                 </div>
                             </Box>
                         )}
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <div className="gcse-search"></div>
+                        <Box
+                            component="form"
+                            onSubmit={handleSearch}
+                            sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}
+                        >
+                            <TextField 
+                                id="outlined-basic" 
+                                placeholder="Search here..." 
+                                variant="outlined" 
+                                fullWidth 
+                                size="small" 
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            <Button type="submit" variant="contained" sx={{ paddingTop: 1, paddingBottom: 1 }}>
+                                Search
+                            </Button>
                         </Box>
                         {children}
                     </Box>
                 </Box>
             </Box>
-            <Script async src="https://cse.google.com/cse.js?cx=a01387873d052466b" />
         </div>
     );
 }

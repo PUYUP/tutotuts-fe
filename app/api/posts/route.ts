@@ -205,8 +205,12 @@ export async function GET(req: NextRequest) {
       .range(Number(from), Number(to));
 
     if (categoryIds) {
-      // Filter dengan .in() agar mencakup parent + semua child categories
       qs = qs.in('tutorial_categories.category_id', categoryIds);
+    }
+
+    const q = url.searchParams.get('q');
+    if (q) {
+      qs = qs.ilike('title', `%${q}%`);
     }
 
     const { data, error } = await qs;
