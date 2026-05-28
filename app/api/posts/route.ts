@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
     saveImage(afterFile, 'after'),
   ]);
 
-  // Insert tutorial
   const { data: tutorial, error: tutorialError } = await supabase
     .from('tutorials')
     .insert({
@@ -60,7 +59,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: tutorialError.message }, { status: 500 });
   }
 
-  // Insert category relation if categoryId provided
   if (categoryId) {
     const { error: categoryError } = await supabase
       .from('tutorial_categories')
@@ -75,6 +73,92 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(tutorial, { status: 201 });
+}
+
+export async function PATCH(req: NextRequest) {
+  const url = new URL(req.url);
+  const id = url.searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
+  }
+
+  const form = await req.formData();
+
+  // Ambil field teks — hanya update jika dikirim
+  const title = form.get('title') as string | null;
+  const slug = form.get('slug') as string | null;
+  const sourceId = form.get('sourceId') as string | null;
+  const sourceUrl = form.get('sourceUrl') as string | null;
+  const content = form.get('content') as string | null;
+  const categoryId = form.get('categoryId') as string | null;
+
+  // File baru (jika ada) → upload; jika tidak, pakai URL lama dari form
+  const thumbnailFile = form.get('thumbnail') as File | null;
+  const beforeFile = form.get('imageBefore') as File | null;
+  const afterFile = form.get('imageAfter') as File | null;
+
+  const existingThumbnailUrl = form.get('thumbnailUrl') as string | null;
+  const existingBeforeUrl = form.get('imageBeforeUrl') as string | null;
+  const existingAfterUrl = form.get('imageAfterUrl') as string | null;
+
+  // Upload file baru secara paralel (hanya yang ada)
+  const [uploadedThumbnail, uploadedBefore, uploadedAfter] = await Promise.all([
+    thumbnailFile ? saveImage(thumbnailFile, 'thumbnail') : Promise.resolve(null),
+    beforeFile ? saveImage(beforeFile, 'before') : Promise.resolve(null),
+    afterFile ? saveImage(afterFile, 'after') : Promise.resolve(null),
+  ]);
+
+  // Resolusi URL akhir: file baru > URL lama dari form > null (hapus)
+  const thumbnailUrl = uploadedThumbnail ?? existingThumbnailUrl ?? null;
+  const imageBeforeUrl = uploadedBefore ?? existingBeforeUrl ?? null;
+  const imageAfterUrl = uploadedAfter ?? existingAfterUrl ?? null;
+
+  // Bangun payload — hanya field yang dikirim
+  const payload: Record<string, unknown> = {};
+  if (title !== null) payload.title = title;
+  if (slug !== null) payload.slug = slug;
+  if (sourceId !== null) payload.source_id = sourceId;
+  if (sourceUrl !== null) payload.source_url = sourceUrl;
+  if (content !== null) payload.content = content;
+  payload.thumbnail_url = thumbnailUrl;
+  payload.image_before_url = imageBeforeUrl;
+  payload.image_after_url = imageAfterUrl;
+
+  const { data: tutorial, error: tutorialError } = await supabase
+    .from('tutorials')
+    .update(payload)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (tutorialError) {
+    return NextResponse.json({ error: tutorialError.message }, { status: 500 });
+  }
+
+  // Sync kategori: hapus relasi lama lalu insert yang baru (jika categoryId dikirim)
+  if (categoryId !== null) {
+    const { error: deleteError } = await supabase
+      .from('tutorial_categories')
+      .delete()
+      .eq('tutorial_id', id);
+
+    if (deleteError) {
+      return NextResponse.json({ error: deleteError.message }, { status: 500 });
+    }
+
+    if (categoryId) {
+      const { error: insertError } = await supabase
+        .from('tutorial_categories')
+        .insert({ tutorial_id: id, category_id: categoryId });
+
+      if (insertError) {
+        return NextResponse.json({ error: insertError.message }, { status: 500 });
+      }
+    }
+  }
+
+  return NextResponse.json(tutorial);
 }
 
 export async function GET(req: NextRequest) {
@@ -109,7 +193,6 @@ export async function GET(req: NextRequest) {
     .from('tutorials')
     .select('*, tutorial_categories(category_id, categories(id, name))');
 
-  // Query berdasarkan slug ATAU id
   if (slug) {
     query = query.eq('slug', slug);
   } else if (id) {

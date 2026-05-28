@@ -48,20 +48,34 @@ const VisuallyHiddenInput = styled("input")({
 type ImageField = {
   file: File | null;
   preview: string | null;
+  existingUrl: string | null;
 };
 
-function useImageField(): [ImageField, (e: React.ChangeEvent<HTMLInputElement>) => void, () => void] {
-  const [state, setState] = useState<ImageField>({ file: null, preview: null });
+function useImageField(
+  initialUrl?: string | null
+): [
+    ImageField,
+    (e: React.ChangeEvent<HTMLInputElement>) => void,
+    () => void
+  ] {
+  const [state, setState] = useState<ImageField>({
+    file: null,
+    preview: null,
+    existingUrl: initialUrl ?? null,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setState({
+    setState((prev) => ({
+      ...prev,
       file,
       preview: file ? URL.createObjectURL(file) : null,
-    });
+      existingUrl: file ? null : prev.existingUrl,
+    }));
   };
 
-  const handleRemove = () => setState({ file: null, preview: null });
+  const handleRemove = () =>
+    setState({ file: null, preview: null, existingUrl: null });
 
   return [state, handleChange, handleRemove];
 }
@@ -79,6 +93,8 @@ function ImageUpload({
   onRemove: () => void;
   disabled?: boolean;
 }) {
+  const displaySrc = field.preview ?? field.existingUrl;
+
   return (
     <div>
       <label className="block font-medium mb-1">{label}</label>
@@ -90,13 +106,13 @@ function ImageUpload({
         startIcon={<CloudUploadIcon />}
         disabled={disabled}
       >
-        Upload image
+        {field.existingUrl && !field.preview ? "Replace image" : "Upload image"}
         <VisuallyHiddenInput type="file" accept="image/*" onChange={onChange} />
       </Button>
-      {field.preview && (
+      {displaySrc && (
         <div className="mt-2 relative w-1/3 aspect-video rounded overflow-hidden border">
           <img
-            src={field.preview}
+            src={displaySrc}
             alt={`${label} preview`}
             className="w-full h-full object-cover"
           />
@@ -123,17 +139,28 @@ export default function PostForm({ initialData }: Props) {
   const [sourceId, setSourceId] = useState(initialData?.source_id ?? "");
   const [sourceUrl, setSourceUrl] = useState(initialData?.source_url ?? "");
   const [categoryPath, setCategoryPath] = useState<string[]>([]);
-  const [categoryId, setCategoryId] = useState<string | null>(initialData?.tutorial_categories?.[0]?.categories?.id ?? null);
+  const [categoryId, setCategoryId] = useState<string | null>(
+    initialData?.tutorial_categories?.[0]?.categories?.id ?? null
+  );
   const [content, setContent] = useState(initialData?.content ?? "");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const [thumbnail, onThumbnailChange, onThumbnailRemove] = useImageField();
-  const [imageBefore, onBeforeChange, onBeforeRemove] = useImageField();
-  const [imageAfter, onAfterChange, onAfterRemove] = useImageField();
+  const [thumbnail, onThumbnailChange, onThumbnailRemove] = useImageField(
+    initialData?.thumbnail_url
+  );
+  const [imageBefore, onBeforeChange, onBeforeRemove] = useImageField(
+    initialData?.image_before_url
+  );
+  const [imageAfter, onAfterChange, onAfterRemove] = useImageField(
+    initialData?.image_after_url
+  );
 
   const generateSlug = (t: string) =>
-    t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    t
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -145,7 +172,7 @@ export default function PostForm({ initialData }: Props) {
     setLoading(true);
 
     const url = isEditing ? `/api/posts?id=${initialData.id}` : "/api/posts";
-    const method = isEditing ? "PUT" : "POST";
+    const method = isEditing ? "PATCH" : "POST";
 
     try {
       const form = new FormData();
@@ -156,9 +183,25 @@ export default function PostForm({ initialData }: Props) {
       form.append("categoryPath", JSON.stringify(categoryPath));
       form.append("categoryId", categoryId || "");
       form.append("content", content);
-      if (thumbnail.file) form.append("thumbnail", thumbnail.file);
-      if (imageBefore.file) form.append("imageBefore", imageBefore.file);
-      if (imageAfter.file) form.append("imageAfter", imageAfter.file);
+
+      if (thumbnail.file) {
+        form.append("thumbnail", thumbnail.file);
+      } else if (thumbnail.existingUrl) {
+        // Pertahankan URL lama jika tidak diganti
+        form.append("thumbnailUrl", thumbnail.existingUrl);
+      }
+
+      if (imageBefore.file) {
+        form.append("imageBefore", imageBefore.file);
+      } else if (imageBefore.existingUrl) {
+        form.append("imageBeforeUrl", imageBefore.existingUrl);
+      }
+
+      if (imageAfter.file) {
+        form.append("imageAfter", imageAfter.file);
+      } else if (imageAfter.existingUrl) {
+        form.append("imageAfterUrl", imageAfter.existingUrl);
+      }
 
       const res = await fetch(url, { method, body: form });
       const json = await res.json();
@@ -166,16 +209,19 @@ export default function PostForm({ initialData }: Props) {
 
       if (res.ok) {
         setOpen(true);
-        setTitle("");
-        setSlug("");
-        setSourceId("");
-        setSourceUrl("");
-        setCategoryPath([]);
-        setCategoryId(null);
-        setContent("");
-        onThumbnailRemove();
-        onBeforeRemove();
-        onAfterRemove();
+        if (!isEditing) {
+          // Reset form hanya saat create, bukan edit
+          setTitle("");
+          setSlug("");
+          setSourceId("");
+          setSourceUrl("");
+          setCategoryPath([]);
+          setCategoryId(null);
+          setContent("");
+          onThumbnailRemove();
+          onBeforeRemove();
+          onAfterRemove();
+        }
       } else {
         alert(`Error: ${json.error ?? res.statusText}`);
       }
@@ -187,16 +233,16 @@ export default function PostForm({ initialData }: Props) {
     }
   };
 
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
     setOpen(false);
-  }
+  };
 
   return (
     <>
-      {/* Full-screen overlay saat loading */}
       {loading && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
           <CircularProgress size={52} thickness={4} sx={{ color: "#fff" }} />
@@ -230,10 +276,13 @@ export default function PostForm({ initialData }: Props) {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <CategorySelect selectedId={categoryId ?? undefined} onChange={(path, id) => {
-            setCategoryPath(path);
-            setCategoryId(id);
-          }} />
+          <CategorySelect
+            selectedId={categoryId ?? undefined}
+            onChange={(path, id) => {
+              setCategoryPath(path);
+              setCategoryId(id);
+            }}
+          />
 
           <div>
             <label className="block font-medium mb-1">Source ID</label>
@@ -315,10 +364,18 @@ export default function PostForm({ initialData }: Props) {
           type="submit"
           variant="contained"
           disabled={loading}
-          startIcon={loading ? <CircularProgress size={16} thickness={4} sx={{ color: "inherit" }} /> : null}
+          startIcon={
+            loading ? (
+              <CircularProgress
+                size={16}
+                thickness={4}
+                sx={{ color: "inherit" }}
+              />
+            ) : null
+          }
           sx={{ px: 3, py: 1 }}
         >
-          {loading ? "Publishing…" : "Publish"}
+          {loading ? "Publishing…" : isEditing ? "Update" : "Publish"}
         </Button>
       </form>
 
@@ -326,9 +383,14 @@ export default function PostForm({ initialData }: Props) {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Post saved!"
+        message={isEditing ? "Post updated!" : "Post saved!"}
         action={
-          <Button variant="text" size="small" onClick={handleClose} sx={{ color: "#fff" }}>
+          <Button
+            variant="text"
+            size="small"
+            onClick={handleClose}
+            sx={{ color: "#fff" }}
+          >
             Close
           </Button>
         }
