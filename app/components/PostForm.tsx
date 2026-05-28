@@ -21,10 +21,15 @@ interface Props {
     source_id: string;
     source_url: string;
     content: string;
-    category_id?: string;
     thumbnail_url?: string;
     image_before_url?: string;
     image_after_url?: string;
+    tutorial_categories?: {
+      categories: {
+        id: string;
+        name: string;
+      };
+    }[];
   } | null;
 }
 
@@ -118,8 +123,8 @@ export default function PostForm({ initialData }: Props) {
   const [sourceId, setSourceId] = useState(initialData?.source_id ?? "");
   const [sourceUrl, setSourceUrl] = useState(initialData?.source_url ?? "");
   const [categoryPath, setCategoryPath] = useState<string[]>([]);
-  const [categoryId, setCategoryId] = useState<string | null>(null);
-  const [content, setContent] = useState("");
+  const [categoryId, setCategoryId] = useState<string | null>(initialData?.tutorial_categories?.[0]?.categories?.id ?? null);
+  const [content, setContent] = useState(initialData?.content ?? "");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -225,7 +230,7 @@ export default function PostForm({ initialData }: Props) {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <CategorySelect onChange={(path, id) => {
+          <CategorySelect selectedId={categoryId ?? undefined} onChange={(path, id) => {
             setCategoryPath(path);
             setCategoryId(id);
           }} />

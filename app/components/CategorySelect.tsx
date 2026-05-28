@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useMemo, useState } from "react";
 
 interface CategoryNode {
   id: string;
@@ -9,9 +10,10 @@ interface CategoryNode {
 
 interface Props {
   onChange: (path: string[], categoryId: string) => void;
+  selectedId?: string;
 }
 
-export default function CategorySelect({ onChange }: Props) {
+export default function CategorySelect({ onChange, selectedId }: Props) {
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [selectedPath, setSelectedPath] = useState<string[]>([]);
 
@@ -22,16 +24,34 @@ export default function CategorySelect({ onChange }: Props) {
       .catch(() => setCategories([]));
   }, []);
 
-  // flatten tree for a simple <select>
-  const flatten = (nodes: CategoryNode[], prefix: string[] = []): { id: string; label: string; path: string[] }[] => {
-    return nodes.flatMap((node) => {
-      const currentPath = [...prefix, '--'];
-      const entry = { id: node.id, label: prefix.concat(node.name).join(" / "), path: currentPath };
-      return node.children ? [entry, ...flatten(node.children, currentPath)] : [entry];
-    });
-  };
+  // ✅ Memoize so the array reference is stable between renders
+  const options = useMemo(() => {
+    const flatten = (
+      nodes: CategoryNode[],
+      prefix: string[] = []
+    ): { id: string; label: string; path: string[] }[] => {
+      return nodes.flatMap((node) => {
+        const currentPath = [...prefix, node.name];
+        return node.children
+          ? [
+            { id: node.id, label: currentPath.join(" / "), path: currentPath },
+            ...flatten(node.children, currentPath),
+          ]
+          : [{ id: node.id, label: currentPath.join(" / "), path: currentPath }];
+      });
+    };
+    return flatten(categories);
+  }, [categories]); // ✅ Only recomputes when categories actually changes
 
-  const options = flatten(categories);
+  // ✅ Now safe: effect only re-runs when selectedId or options reference changes
+  useEffect(() => {
+    if (selectedId) {
+      const opt = options.find((o) => o.id === selectedId);
+      if (opt) {
+        setSelectedPath(opt.path);
+      }
+    }
+  }, [selectedId, options]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value;
@@ -45,7 +65,11 @@ export default function CategorySelect({ onChange }: Props) {
   return (
     <div>
       <label className="block font-medium mb-1">Category</label>
-      <select className="w-full rounded border p-2" onChange={handleSelect} defaultValue="">
+      <select
+        className="w-full rounded border p-2"
+        onChange={handleSelect}
+        value={selectedId ?? ""}
+      >
         <option value="" disabled>
           Select a category
         </option>
